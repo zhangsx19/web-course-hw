@@ -1,13 +1,12 @@
-from flask import Flask,jsonify,request
-import json
+from flask import Flask
+from sqlalchemy import true
+from user import user_api
+from project import project_api
 from flask_cors import CORS
 app = Flask(__name__)
-app.config.from_object(__name__)
+
+app.register_blueprint(user_api, url_prefix='/user')
+app.register_blueprint(project_api, url_prefix='/project')
 CORS(app)
-
-@app.route('/login', methods=['GET', 'POST','OPTION'])
-def login():
-   return jsonify('hello')
-
 if __name__ == '__main__':
    app.run()
