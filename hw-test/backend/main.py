@@ -5,7 +5,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 CORS(app)
 
-@app.route('/upload-file', methods=['GET', 'POST','OPTION'])
+@app.route('/login', methods=['GET', 'POST','OPTION'])
 def login():
    return jsonify('hello')
 
