@@ -1,91 +1,62 @@
 <template>
   <div>
     <!-- <el-button type="primary">el-button</el-button> -->
-    <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" />
+    <el-tree :data="data" @node-click="handleNodeClick" />
   </div>
 </template>
 
-<script lang="ts">
+<script>
+import $ from "jquery";
 export default {
   name: "HomeView",
   components: {},
-  setup() {
-    interface Tree {
-      label: string;
-      children?: Tree[];
-    }
+  data() {
+    return {
+      data: [
+        {
+          label: "Level one 1",
+          children: [
+            {
+              label: "Level two 1-1",
+              children: [],
+            },
+          ],
+        },
+      ],
+    };
+  },
 
-    const handleNodeClick = (data: Tree) => {
+  setup() {
+    const handleNodeClick = (data) => {
       console.log(data);
     };
-
-    const data: Tree[] = [
-      {
-        label: "Level one 1",
-        children: [
-          {
-            label: "Level two 1-1",
-            children: [
-              {
-                label: "Level three 1-1-1",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        label: "Level one 2",
-        children: [
-          {
-            label: "Level two 2-1",
-            children: [
-              {
-                label: "Level three 2-1-1",
-              },
-            ],
-          },
-          {
-            label: "Level two 2-2",
-            children: [
-              {
-                label: "Level three 2-2-1",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        label: "Level one 3",
-        children: [
-          {
-            label: "Level two 3-1",
-            children: [
-              {
-                label: "Level three 3-1-1",
-              },
-            ],
-          },
-          {
-            label: "Level two 3-2",
-            children: [
-              {
-                label: "Level three 3-2-1",
-              },
-            ],
-          },
-        ],
-      },
-    ];
-
-    const defaultProps = {
-      children: "children",
-      label: "label",
-    };
     return {
-      data,
-      defaultProps,
       handleNodeClick,
     };
+  },
+  mounted() {
+    setTimeout(() => {
+      this.refreshlist();
+    }, 2000);
+  },
+  methods: {
+    refreshlist() {
+      $.ajax({
+        url: "http://127.0.0.1:5000/project/list-files",
+        type: "POST",
+        data: JSON.stringify({
+          userid: "1",
+          projectid: "a",
+        }),
+        dataType: "json",
+        success: (resp) => {
+          // console.log(resp);
+          this.data = [];
+          this.data.push(resp);
+          console.log(this.data);
+        },
+      });
+    },
   },
 };
 </script>

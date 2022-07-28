@@ -10,13 +10,12 @@ def upload_file():
         file_info = dict(request.form)
         f_name = secure_filename(file_buffer.filename)
         basedir = os.path.abspath(os.path.dirname(__file__))
-        uploadpath = 'upload\\'+file_info['userid']
-        uploadpath = os.path.join(basedir,uploadpath)
-        file_path = os.path.join(uploadpath,f_name)
+        uploadpath = 'upload\\'+file_info['userid']+'\\'+file_info['projectid']
+        projectpath = os.path.join(basedir,uploadpath)
+        if not os.path.exists(projectpath):
+            os.makedirs(projectpath)
+        file_path = os.path.join(projectpath,f_name)
         data = {"code": 500, "msg": "上传失败！"}
-        if not os.path.exists(uploadpath):
-            os.makedirs(uploadpath)
-            #print(os.path.exists(uploadpath))
         try:
             file_buffer.save(file_path)
             data.update({"code": 200, "msg": "上传成功！"})

@@ -22,9 +22,11 @@ export default {
     };
   },
   computed: {
+    //登录用户信息接口
     file_info() {
       const data = {
         userid: "1",
+        projectid: "a",
       };
       return data;
     },
