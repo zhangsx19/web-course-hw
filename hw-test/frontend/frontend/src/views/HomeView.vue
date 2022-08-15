@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import $ from "jquery";
+import axios from "axios";
 export default {
   name: "HomeView",
   components: {},
@@ -53,19 +53,19 @@ export default {
       return tree_arr;
     },
     refreshlist() {
-      $.ajax({
-        url: "http://127.0.0.1:4523/m1/1454888-0-default/project/list-files",
-        type: "POST",
-        data: JSON.stringify({
-          session: "1",
-          project: "a",
-        }),
-        dataType: "json",
-        success: (resp) => {
-          //console.log(resp);
+      axios
+        .post(
+          "http://127.0.0.1:4523/m1/1454888-0-default/project/list-files",
+          JSON.stringify({
+            session: "1",
+            project: "a",
+          })
+        )
+        .then((resp) => {
+          resp = resp["data"];
+          console.log(resp);
           this.data = [];
           if (resp["code"] == 0) {
-            console.log(this.list2tree(resp["files"]));
             this.data = this.list2tree(resp["files"]);
           } else if (resp["code"] == 1) {
             alert("session无效");
@@ -74,8 +74,10 @@ export default {
           } else {
             alert("未知错误");
           }
-        },
-      });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
 };
